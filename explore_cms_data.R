@@ -3,12 +3,16 @@ library(janitor)
 library(readr)
 library(logger)
 
+log_info("Loading data")
 
 df <- as_tibble(read_csv("/Users/william/Library/CloudStorage/Dropbox/Rscripts/cms-data/PATIENT_REPORTED_OUTCOMES_FACILITY(1).csv"))
 
 # d?f <- clean_names(df, "lower_camel")
 
 # Cleaning 
+# Recoding the voluntary reporting 
+log_info("Cleaning data")
+
 df <- df |> 
   clean_names("snake") |> 
   mutate(voluntary_reporting = recode
@@ -18,7 +22,12 @@ df <- df |>
     score = score |> 
       replace_when(score == "Not Available" ~ NA)
   )
-  
+
+# Creating the list of states 
+df_staterr <- unique(df$state)
+
+
+
 
 # turn all of the Not Available into NA 
 
